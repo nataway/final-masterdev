@@ -1,6 +1,6 @@
 # Chức năng hệ thống
 
-- khảo sát thông tin và phân tích về bệnh ung thư qua các năm
+- khảo sát thông tin và phân tích về bệnh tim mạch qua các năm
 
 # mô hình hoạt động 
 

@@ -4,7 +4,7 @@
 
 # mô hình hoạt động 
 
-![Screen Shot 2022-08-14 at 23 51 49](https://user-images.githubusercontent.com/43698423/184547130-cb7b3782-970e-407b-a1e5-03a6dfa43577.png)
+<img width="821" alt="Screen Shot 2022-08-13 at 16 06 09" src="https://user-images.githubusercontent.com/43698423/184611087-d0c4b70a-384a-4107-9764-76dbfee232f0.png">
 
 1. Kafka: stream dữ liệu đổ về
 

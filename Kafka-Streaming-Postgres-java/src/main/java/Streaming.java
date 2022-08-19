@@ -1,6 +1,4 @@
-
 import org.apache.spark.api.java.function.VoidFunction2;
-import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -8,8 +6,8 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.expressions.UserDefinedFunction;
 import org.apache.spark.sql.streaming.StreamingQueryException;
 import org.apache.spark.sql.streaming.Trigger;
-import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
+
 
 import static org.apache.spark.sql.functions.*;
 
@@ -21,7 +19,7 @@ public class Streaming {
             rowDataset.write()
                     .mode("append")
                     .format("jdbc")
-                    .option("url", "jdbc:postgresql://192.168.193.220/masterdev")
+                    .option("url", "jdbc:postgresql://172.17.80.23/masterdev")
                     .option("user", "postgres")
                     .option("password", "postgres")
                     .option("dbtable","benhtim.test1")
@@ -34,14 +32,14 @@ public class Streaming {
         SparkSession spark = SparkSession
                 .builder()
                 .appName("Spark Kafka Integration using Structured Streaming chibm")
-                .master("local")
+//                .master("local")
                 .getOrCreate();
 
 
         Dataset<Row> df = spark
                 .readStream()
                 .format("kafka")
-                .option("kafka.bootstrap.servers", "192.168.193.220:9092")
+                .option("kafka.bootstrap.servers", "172.17.80.22:9092")
                 .option("subscribe", "test_final1")
                 .option("group.id","group1")
                 .option("startingOffsets","earliest")
@@ -65,29 +63,28 @@ public class Streaming {
                         split(col("value"),",").getItem(9).cast("int").alias("smoke"),
                         split(col("value"),",").getItem(10).cast("int").alias("alco"),
                         split(col("value"),",").getItem(11).cast("int").alias("active"),
-                        split(col("value"),",").getItem(12).cast("int").alias("cardio"));
+                        split(col("value"),",").getItem(12).cast("int").alias("cardio"),
+                        to_date(split(col("value"),",").getItem(13),"yyyy-mm-dd").alias("time"));
 
         Dataset<Row> df2 = df1.selectExpr("etl_time","strLen(age) as age","gender","height",
-                "weight","ap_hi","ap_lo","cholesterol","gluc","smoke","alco","active","cardio" );
+                "weight","ap_hi","ap_lo","cholesterol","gluc","smoke","alco","active","cardio","time" );
 
-        df2.printSchema();
+//        df2.printSchema();
 //        df2.printSchema();
 //        df2.show();
+
 
 
         df2.writeStream()
                 .outputMode("append")
                 .foreachBatch(saveFunction.class.newInstance())
-                .option("checkpointLocation", "chibm/checkpoint1")
+                .option("checkpointLocation", "/chibm_checkpoint1")
                 .trigger(Trigger.ProcessingTime(1000))
                 .start();
-        spark.streams().awaitAnyTermination();
-//        spark.sparkContext().stop();
+        spark.streams().awaitAnyTermination(200000);
+        spark.sparkContext().stop();
 
 
     }
 
-
-
 }
-//id,age,gender,height,weight,ap_hi,ap_lo,cholesterol,gluc,smoke,alco,active,cardio

@@ -9,7 +9,7 @@ spark = SparkSession.builder.config("spark.jars", "/home/chibm/postgresql-42.4.1
 df = spark \
   .readStream \
   .format("kafka") \
-  .option("kafka.bootstrap.servers", "172.17.80.23:9092") \
+  .option("kafka.bootstrap.servers", "172.17.80.22:9092") \
   .option("subscribe", "test_final1") \
   .option("startingOffsets","earliest") \
   .load()
@@ -56,10 +56,10 @@ df1.writeStream \
     .option("checkpointLocation", "/home/chibm/checkpoint1") \
     .trigger(processingTime='1 seconds') \
     .start()
-spark.streams.awaitAnyTermination(timeout=60000)
-
+spark.streams.awaitAnyTermination(timeout=30)
+spark.sparkContext.stop()
 # id;age;gender;height;weight;ap_hi;ap_lo;cholesterol;gluc;smoke;alco;active;cardio
 
 
-# id,age,gender,height,weight,ap_hi,ap_lo,cholesterol,gluc,smoke,alco,active,cardio,time
+# id;age;gender;height;weight;ap_hi;ap_lo;cholesterol;gluc;smoke;alco;active;cardio
 # spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.0.1,org.postgresql:postgresql:42.2.18 /home/chibm/spark_gtvt/streaming.py

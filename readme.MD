@@ -20,6 +20,13 @@ http://172.17.80.23:8081
 - user:passs airflow:airflow
 - dag : csvToKafka
 
+  - đẩy data từ file csv -> kafka. mỗi phút đọc 50 bản ghi
+
+- dag : SparkToPostgres
+
+  - lập lịch chạy Spark Streaming lưu data đọc từ kafka xuống postgres
+  
+  - 20p đọc 1 lần. 
 # superset
 
 ```

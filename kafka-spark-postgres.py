@@ -57,7 +57,6 @@ df1.writeStream \
     .trigger(processingTime='1 seconds') \
     .start()
 spark.streams.awaitAnyTermination(timeout=60000)
-spark.stop()
 
 # id;age;gender;height;weight;ap_hi;ap_lo;cholesterol;gluc;smoke;alco;active;cardio
 

@@ -1,3 +1,4 @@
+
 import org.apache.spark.api.java.function.VoidFunction2;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -19,7 +20,7 @@ public class Streaming {
             rowDataset.write()
                     .mode("append")
                     .format("jdbc")
-                    .option("url", "jdbc:postgresql://172.17.80.23/masterdev")
+                    .option("url", "jdbc:postgresql://192.168.193.220/masterdev")
                     .option("user", "postgres")
                     .option("password", "postgres")
                     .option("dbtable","benhtim.test1")
@@ -31,15 +32,16 @@ public class Streaming {
     public static void main(String[] args) throws StreamingQueryException, InstantiationException, IllegalAccessException {
         SparkSession spark = SparkSession
                 .builder()
-                .appName("Spark Kafka Integration using Structured Streaming chibm")
-//                .master("local")
+                .appName("chibm")
+                .master("yarn")
+                .config("spark.yarn.stagingDir","hdfs://172.17.80.21:9000/user/hadoop")
                 .getOrCreate();
 
 
         Dataset<Row> df = spark
                 .readStream()
                 .format("kafka")
-                .option("kafka.bootstrap.servers", "172.17.80.22:9092")
+                .option("kafka.bootstrap.servers", "192.168.193.93:9092")
                 .option("subscribe", "test_final1")
                 .option("group.id","group1")
                 .option("startingOffsets","earliest")
@@ -64,7 +66,7 @@ public class Streaming {
                         split(col("value"),",").getItem(10).cast("int").alias("alco"),
                         split(col("value"),",").getItem(11).cast("int").alias("active"),
                         split(col("value"),",").getItem(12).cast("int").alias("cardio"),
-                        to_date(split(col("value"),",").getItem(13),"yyyy-mm-dd").alias("time"));
+                        split(col("value"),",").getItem(13).cast("timestamp").alias("time"));
 
         Dataset<Row> df2 = df1.selectExpr("etl_time","strLen(age) as age","gender","height",
                 "weight","ap_hi","ap_lo","cholesterol","gluc","smoke","alco","active","cardio","time" );
@@ -77,14 +79,43 @@ public class Streaming {
 
         df2.writeStream()
                 .outputMode("append")
+//                .option("path", "data_tracking1")
                 .foreachBatch(saveFunction.class.newInstance())
-                .option("checkpointLocation", "/chibm_checkpoint1")
+                .option("checkpointLocation", "hdfs:///user/chibm/checkpoint1")
                 .trigger(Trigger.ProcessingTime(1000))
                 .start();
-        spark.streams().awaitAnyTermination(200000);
+        spark.streams().awaitAnyTermination(20000);
         spark.sparkContext().stop();
 
 
     }
 
+
+
 }
+//id,age,gender,height,weight,ap_hi,ap_lo,cholesterol,gluc,smoke,alco,active,cardio
+
+//    SELECT age,
+//            CASE
+//    WHEN gender = 1 THEN 'women'
+//        ELSE 'men'
+//        END gender,
+//        height,
+//        weight,
+//        ap_hi as Systolic_blood_pressure,
+//        CASE
+//        WHEN gluc = 1 THEN 'normal'
+//        WHEN gluc = 2 THEN 'above normal'
+//        ELSE 'well above normal'
+//        END cholesterol,
+//        CASE
+//        WHEN gluc = 1 THEN 'normal'
+//        WHEN gluc = 2 THEN 'above normal'
+//        ELSE 'well above normal'
+//        END Glucose,
+//        smoke,
+//        alco,
+//        active as Physical_activity,
+//        cardio,
+//        time
+//        from benhtim.test1 ;

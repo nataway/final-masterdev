@@ -1,0 +1,54 @@
+I.-----------------------CREATE TABLE-----------------------------------------
+1.virtual_table
+SELECT age,
+        CASE
+          WHEN gender = 1 THEN 'women'
+          ELSE 'men'
+        END gender,
+        height,
+        weight,
+        ap_hi as "Systolic blood pressure",
+        CASE
+          WHEN cholesterol = 1 THEN 'normal'
+          WHEN cholesterol = 2 THEN 'above normal'
+          ELSE 'well above normal'
+        END cholesterol,
+        CASE
+          WHEN gluc = 1 THEN 'normal'
+          WHEN gluc = 2 THEN 'above normal'
+          ELSE 'well above normal'
+        END Glucose,
+        CASE 
+          WHEN smoke = 1 THEN 'yes'
+          ELSE 'no'
+        END smoke,
+        CASE 
+          WHEN alco = 1 THEN 'yes'
+          ELSE 'no'
+        END alco,
+        CASE 
+          WHEN active = 1 THEN 'yes'
+          ELSE 'no'
+        END "Physical activity",
+        CASE 
+          WHEN cardio = 1 THEN 'yes'
+          ELSE 'no'
+        END cardio,
+        CASE
+          WHEN cast(weight as FLOAT ) / pow(cast(height as FLOAT )/100,2) < 18.5 then '1.gầy'
+          WHEN cast(weight as FLOAT ) / pow(cast(height as FLOAT )/100,2) < 23.0 THEN  '2.bình thường'
+          WHEN cast(weight as FLOAT ) / pow(cast(height as FLOAT )/100,2) < 25.0 THEN  '3.tiền béo phì'
+          when cast(weight as FLOAT ) / pow(cast(height as FLOAT )/100,2) < 30.0 then '4.béo phì loại 1'
+          else '5.béo phì loại 2'
+        END BMI,
+        time
+        from benhtim.test1 ; 
+
+
+II.--------------------------CREATE CHARTS--------------------------------------
+1. SELECT gender AS gender,
+       count(*) AS count
+FROM virtual_table
+GROUP BY gender
+ORDER BY count DESC
+LIMIT 100;

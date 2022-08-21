@@ -6,7 +6,7 @@ from airflow.providers.ssh.hooks.ssh import SSHHook
 sshHook = SSHHook(ssh_conn_id=None,
                   remote_host='172.17.80.21',
                   username='hadoop',
-                  password='1',
+                  password='',
                   key_file=None,
                   port=22,
                   conn_timeout=10)

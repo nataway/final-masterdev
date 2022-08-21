@@ -8,7 +8,7 @@ from kafka import KafkaProducer,KafkaConsumer
 
 def my_producer():
     my_producer = KafkaProducer(
-    bootstrap_servers = ['192.168.193.200 : 9092'],
+    bootstrap_servers = ['192.168.193.93 : 9092'],
     value_serializer = lambda x : bytearray(x, 'utf-8')
     )
     topic = 'test_final1'
@@ -38,7 +38,7 @@ def my_producer():
 def my_consumers():
     my_consumer = KafkaConsumer(
         'test_final1',
-        bootstrap_servers=['192.168.193.200 : 9092'],
+        bootstrap_servers=['192.168.193.93 : 9092'],
         auto_offset_reset='earliest',
         enable_auto_commit=True,
         group_id='my-group',

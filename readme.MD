@@ -34,3 +34,11 @@ http://172.17.80.24:8089
 ```
 - user:pass admin:1
 - dashboard : chibm
+
+<img width="1440" alt="Screen Shot 2022-08-22 at 09 58 27" src="https://user-images.githubusercontent.com/43698423/186805454-cf8dc8ba-e478-42ab-a222-2d0cfafd528c.png">
+
+<img width="1440" alt="Screen Shot 2022-08-22 at 09 58 42" src="https://user-images.githubusercontent.com/43698423/186805610-4b2af837-88eb-45a6-ba71-2a39659efda9.png">
+
+<img width="1440" alt="Screen Shot 2022-08-22 at 09 58 56" src="https://user-images.githubusercontent.com/43698423/186805558-c8f4dc42-4baa-46de-bcaa-8a1818e5080b.png">
+
+

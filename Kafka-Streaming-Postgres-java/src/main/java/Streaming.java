@@ -113,7 +113,7 @@ public class Streaming {
                         first("cardio").alias("cardio"),
                         first("time").alias("time")
                         ).drop("window");
-              .save();
+//              .save();
 
 
 

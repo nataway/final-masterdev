@@ -33,7 +33,7 @@ http://172.xxxx.xxxx.xxxx:8081
 http://172.xxxx.xxxx.xxxx:8089
 ```
 - user:pass admin:
-- dashboard : chibm
+- dashboard : Datnb
 
 <img width="1440" alt="Screen Shot 2022-08-22 at 09 58 27" src="https://user-images.githubusercontent.com/43698423/186805454-cf8dc8ba-e478-42ab-a222-2d0cfafd528c.png">
 
